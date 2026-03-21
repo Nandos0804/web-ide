@@ -69,6 +69,15 @@ export const setCsoundPlayState = (
     };
 };
 
+const enableVirtualMidiForRealtime = async (
+    csoundObj: CsoundObj
+): Promise<void> => {
+    // Ensure app-driven `midiMessage()` events are accepted even when
+    // the target CSD does not explicitly configure realtime MIDI options.
+    await csoundObj.setOption("-+rtmidi=null");
+    await csoundObj.setOption("-M0");
+};
+
 export const setCsound = (csound: CsoundObj): void => {
     csound.on("realtimePerformanceEnded", async () => {
         try {
@@ -161,6 +170,8 @@ export const playCsdFromFs = ({
         }
 
         if (csoundObj) {
+            await enableVirtualMidiForRealtime(csoundObj);
+
             const projectDocuments =
                 store.getState().ProjectsReducer.projects?.[projectUid]
                     ?.documents ?? {};
@@ -328,6 +339,7 @@ export const playORCFromString = ({
         }
 
         if (csoundObj) {
+            await enableVirtualMidiForRealtime(csoundObj);
             await csoundObj.setOption("-odac");
 
             const result = await csoundObj.compileOrc(orc);

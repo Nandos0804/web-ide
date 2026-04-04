@@ -7,6 +7,8 @@
     "scripts": {
         "start": "cross-env REACT_APP_DATABASE=DEV vite",
         "start:prod": "cross-env REACT_APP_DATABASE=PROD vite",
+        "sync:csound:local": "node scripts/sync-local-csound-browser.mjs",
+        "update-local-build": "node scripts/update-local-build.mjs",
         "build": "cross-env NODE_ENV=production REACT_APP_DATABASE=PROD tsc && vite build",
         "build:dev": "cross-env NODE_ENV=production REACT_APP_DATABASE=DEV tsc && vite build",
         "typecheck": "tsc --noEmit",
